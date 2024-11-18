@@ -124,3 +124,5 @@ For large-scale applications, consider cloud-based vector databases:
 * Migrating to a cloud-based vector database?
 * Optimizing the search and embedding logic?
 * Exploring fine-tuning a model to improve similar-question matching? 😊
+
+[Vector DB Example](./VectorDBExample.md)
