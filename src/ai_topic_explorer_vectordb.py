@@ -110,29 +110,42 @@ def explore_topic(topic: str) -> dict:
            return cached_response.get("response", {})  # Return the cached response
     
     # Proceed with regular processing if no similar query is found
+
+    # Generate a search query
     query = search_query_chain.run(topic)
+    
+    # Fetch information from Google
     google_results = google_search.run(query)
+
+    # Fetch information from Wikipedia
     wikipedia_results = fetch_wikipedia_summary(topic)
+
+    # Summarize all the information
     summary = summary_chain.run({
         "topic": topic,
         "google_results": google_results,
         "wikipedia_results": wikipedia_results
     })
+
+    # Fetch images from Unsplash
     images = fetch_unsplash_images(topic, per_page=3)
+
+    # Fetch videos from YouTube
     videos = fetch_youtube_videos(topic)
     video_urls = [{"title": video["title"], "link": video["link"]} for video in videos]
     
     # Save the new response in the vector database
+    result = {"summary": summary, "images": images, "videos": video_urls}
     vectorstore.add_texts(
         texts=[topic],
-        metadatas=[{"response": {"summary": summary, "images": images, "videos": video_urls}}],
+        metadatas=[{"response": result}],
         embeddings=[query_embedding]
     )
 
     with open("faiss_index.pkl", "wb") as f:
       pickle.dump(vectorstore, f)
     
-    return {"summary": summary, "images": images, "videos": video_urls}
+    return result
 
 # def explore_topic(topic: str) -> dict:
 #     # Check vector database for similar queries
