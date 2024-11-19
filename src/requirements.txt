@@ -1,0 +1,10 @@
+streamlit
+langchain
+openai
+python-dotenv
+google-search-results
+faiss-cpu
+requests
+wikipedia-api
+youtube-search-python
+
